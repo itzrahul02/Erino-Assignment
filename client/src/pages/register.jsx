@@ -4,7 +4,6 @@ import React from "react";
 import { Navigate,Link } from "react-router-dom";
 const API_BASE_URL = 'https://erino-assignment-gehr.onrender.com';
 
-
 export default function Register() {
   const [formData, setFormData] = useState({
     email: "",

@@ -20,7 +20,6 @@ const buildCookieOptions = () => {
   };
 };
 
-
 const generateTokens = async (userId) => {
   assertEnv('JWT_SECRET');
   assertEnv('REFRESH_TOKEN_SECRET');
@@ -134,7 +133,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   assertEnv('REFRESH_TOKEN_SECRET');
 
   const incoming = req.cookies?.refreshtoken || req.headers['x-refresh-token'];
-  if (!incoming) throw new ApiError(401, 'Please login again');
+  if (!incoming) throw new ApiError(401, 'login karo');
 
   let decoded;
   try {
@@ -156,7 +155,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     .status(200)
     .cookie('accesstoken', accessToken, cookieOptions)
     .cookie('refreshtoken', newRefreshToken, cookieOptions)
-    .json(new ApiResponse(200, { accessToken, refreshToken: newRefreshToken }, 'Access token refreshed successfully'));
+    .json(new ApiResponse(200, { accessToken, refreshToken: newRefreshToken }, 'Access token refreshed successfull'));
 });
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
@@ -178,14 +177,16 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
   user.password = newPassword;
   await user.save({ validateBeforeSave: false });
 
-  return res.status(200).json(new ApiResponse(200, null, 'Password changed successfully'));
+  return res.status(200).json(new ApiResponse(200, null, 'Password changed '));
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user?._id).select('-password -refreshToken');
-  if (!user) throw new ApiError(404, 'User not found');
+  if (!user) {
+    throw new ApiError(404, 'User not found');
+}
 
-  return res.status(200).json(new ApiResponse(200, { user }, 'Current user fetched successfully'));
+  return res.status(200).json(new ApiResponse(200, { user }, 'Current user fetched '));
 });
 
 
@@ -225,7 +226,7 @@ const deleteAvatar = asyncHandler(async (req, res) => {
 
   await User.findByIdAndUpdate(req.user._id, { avatar: null }, { new: true });
 
-  return res.status(200).json(new ApiResponse(200, null, 'Avatar deleted successfully'));
+  return res.status(200).json(new ApiResponse(200, null, 'Avatar deleted '));
 });
 
 export {
