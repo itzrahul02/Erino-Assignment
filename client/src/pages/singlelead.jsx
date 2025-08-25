@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate,Link } from "react-router-dom";
 import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 
 const SingleLead = () => {
   const { id } = useParams(); 
@@ -12,7 +14,7 @@ const SingleLead = () => {
   useEffect(() => {
     const fetchLead = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/v2/leads/singlelead/${id}`, {
+        const res = await axios.get(`${API_BASE_URL}/api/v2/leads/singlelead/${id}`, {
           withCredentials: true,
         });
         setLead(res.data);

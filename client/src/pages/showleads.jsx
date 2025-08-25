@@ -3,6 +3,8 @@ import axios from "axios";
 import React from "react";
 import UpdateLead from "./updateLead";
 import { useNavigate } from "react-router-dom";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 
 const LeadsList = () => {
   const [leads, setLeads] = useState([]);
@@ -20,7 +22,7 @@ const LeadsList = () => {
   const fetchLeads = async (pageNum = 1) => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:3000/api/v2/leads`, {
+      const res = await axios.get(`${API_BASE_URL}/api/v2/leads`, {
         params: { page: pageNum, limit },
         withCredentials: true,
       });
@@ -55,7 +57,7 @@ const LeadsList = () => {
     if (!window.confirm("Are you sure you want to delete this lead?")) return;
 
     try {
-      await axios.delete(`http://localhost:3000/api/v2/leads/deleteLead/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/v2/leads/deleteLead/${id}`, {
         withCredentials: true,
       });
       alert("Lead deleted!");
@@ -79,7 +81,7 @@ const LeadsList = () => {
   const handleUpdate = async () => {
     try {
       await axios.put(
-        `http://localhost:3000/api/v2/leads/updateLead/${editingLead}`,
+        `${API_BASE_URL}/api/v2/leads/updateLead/${editingLead}`,
         formData,
         { withCredentials: true }
       );

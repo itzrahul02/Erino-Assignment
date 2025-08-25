@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const UpdateLead = ({ lead, onClose, refresh }) => {
   const [formData, setFormData] = useState({ ...lead });
@@ -16,7 +17,7 @@ const UpdateLead = ({ lead, onClose, refresh }) => {
     e.preventDefault();
     try {
       await axios.put(
-        `http://localhost:3000/api/v2/leads/updateLead/${lead._id}`,
+        `${API_BASE_URL}/api/v2/leads/updateLead/${lead._id}`,
         formData,
         { withCredentials: true }
       );
@@ -40,7 +41,7 @@ const UpdateLead = ({ lead, onClose, refresh }) => {
           <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Company" className="border p-2 rounded"/>
           <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="City" className="border p-2 rounded"/>
           <input type="text" name="state" value={formData.state} onChange={handleChange} placeholder="State" className="border p-2 rounded"/>
-
+ 
           {/* Enums */}
           <select name="source" value={formData.source} onChange={handleChange} className="border p-2 rounded">
             <option value="">Select Source</option>
