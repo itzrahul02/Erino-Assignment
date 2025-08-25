@@ -1,4 +1,3 @@
-// Navbar.jsx
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -24,7 +23,7 @@ const Navbar = () => {
 
         <button
           onClick={() => {
-            localStorage.removeItem("token"); // or your auth logout logic
+            localStorage.removeItem("token");
             window.location.href = "/";
           }}
           className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"

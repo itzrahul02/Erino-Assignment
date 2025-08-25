@@ -14,11 +14,10 @@ const Login = () => {
     e.preventDefault();
     try {
       await axios.post(
-        // `${API_BASE_URL}/api/v1/user/login`,
+        `${API_BASE_URL}/api/v1/user/login`,
         'https://erino-assignment-gehr.onrender.com/api/v1/user/login',
         // 'http://localhost:3000/api/v1/user/login',
-        { email, password },
-        { withCredentials: true } 
+        { email, password },{ withCredentials: true } 
       );
       navigate("/showleads");
     } catch (error) {
