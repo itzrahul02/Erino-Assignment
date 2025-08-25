@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import React from "react";
 import { Navigate,Link } from "react-router-dom";
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+const API_BASE_URL = 'https://erino-assignment-gehr.onrender.com';
 
 
 export default function Register() {

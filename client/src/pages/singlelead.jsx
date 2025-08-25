@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate,Link } from "react-router-dom";
 import axios from "axios";
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+const API_BASE_URL = 'https://erino-assignment-gehr.onrender.com';
 
 
 const SingleLead = () => {
