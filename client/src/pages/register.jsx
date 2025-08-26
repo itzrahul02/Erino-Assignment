@@ -35,6 +35,7 @@ export default function Register() {
     try {
       const res = await axios.post(
         'https://erino-assignment-gehr.onrender.com/api/v1/user/register',
+        // 'http://localhost:3000/api/v1/user/register',
         data,
         {
           withCredentials: true,

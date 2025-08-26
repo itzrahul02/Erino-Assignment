@@ -14,7 +14,10 @@ const SingleLead = () => {
   useEffect(() => {
     const fetchLead = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/v2/leads/singlelead/${id}`, {
+        const res = await axios.get(
+          `${API_BASE_URL}/api/v2/leads/singlelead/${id}`
+          // `http://localhost:3000/api/v2/leads/singlelead/${id}`
+          , {
           withCredentials: 'include',
         });
         setLead(res.data);

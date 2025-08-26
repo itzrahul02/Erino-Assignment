@@ -18,6 +18,7 @@ const UpdateLead = ({ lead, onClose, refresh }) => {
     try {
       await axios.put(
         `${API_BASE_URL}/api/v2/leads/updateLead/${lead._id}`,
+        // `http://localhost:3000/api/v2/leads/updateLead/${lead._id}`,
         formData,
         { withCredentials: true }
       );

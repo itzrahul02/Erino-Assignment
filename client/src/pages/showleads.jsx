@@ -5,27 +5,28 @@ import UpdateLead from "./updateLead";
 import { useNavigate } from "react-router-dom";
 const API_BASE_URL = 'https://erino-assignment-gehr.onrender.com';
 
-
 const LeadsList = () => {
   const [leads, setLeads] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [editingLead, setEditingLead] = useState(null);
-  const [formData, setFormData] = useState({});
   const [selectedLead, setSelectedLead] = useState(null);
+  const [search, setSearch] = useState("");
 
-  const navigate=useNavigate()
-
+  const navigate = useNavigate();
   const limit = 10;
 
   const fetchLeads = async (pageNum = 1) => {
     setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/v2/leads`, {
-        params: { page: pageNum, limit },
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        // `http://localhost:3000/api/v2/leads`,
+        `${API_BASE_URL}/api/v2/leads`,
+        {
+          params: { page: pageNum, limit },
+          withCredentials: true,
+        }
+      );
       setLeads(res.data.data);
       setPage(res.data.page);
       setTotalPages(res.data.totalPages);
@@ -55,11 +56,11 @@ const LeadsList = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this lead?")) return;
-
     try {
-      await axios.delete(`${API_BASE_URL}/api/v2/leads/deleteLead/${id}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `${API_BASE_URL}/api/v2/leads/deletedLead/${id}`,
+        { withCredentials: true }
+      );
       alert("Lead deleted!");
       fetchLeads(page);
     } catch (err) {
@@ -68,40 +69,30 @@ const LeadsList = () => {
     }
   };
 
-  const handleEdit = (lead) => {
-    setEditingLead(lead._id);
-    setFormData(lead);
+  const handleSingleLead = (id) => {
+    navigate(`/singlelead/${id}`);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleUpdate = async () => {
-    try {
-      await axios.put(
-        `${API_BASE_URL}/api/v2/leads/updateLead/${editingLead}`,
-        formData,
-        { withCredentials: true }
-      );
-      alert("Lead updated!");
-      setEditingLead(null);
-      fetchLeads(page);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update lead");
-    }
-  };
-
-  const handleSingleLead = async(id)=>{
-    console.log("clicked here to navigate");
-    navigate(`/${id}`)
-  }
+  const filteredLeads = leads.filter((lead) =>
+    `${lead.first_name} ${lead.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
+    lead.email.toLowerCase().includes(search.toLowerCase()) ||
+    (lead.phone && lead.phone.toLowerCase().includes(search.toLowerCase())) ||
+    (lead.company && lead.company.toLowerCase().includes(search.toLowerCase())) ||
+    (lead.status && lead.status.toLowerCase().includes(search.toLowerCase()))
+  );
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h2 className="text-2xl font-bold mb-4">Leads List</h2>
+
+      {/* 🔍 Search Box */}
+      <input
+        type="text"
+        placeholder="Search by name, email, phone, company or status..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full p-2 mb-4 border rounded"
+      />
 
       {loading ? (
         <p>Loading...</p>
@@ -125,48 +116,55 @@ const LeadsList = () => {
               </tr>
             </thead>
             <tbody>
-              {leads.map((lead) => (
-                <tr key={lead._id} className="border-b hover:bg-gray-50">
-                  <td className="p-2">
-                    {lead.first_name} {lead.last_name}
-                  </td>
-                  <td className="p-2">{lead.email}</td>
-                  <td className="p-2">{lead.phone}</td>
-                  <td className="p-2">{lead.company}</td>
-                  <td className="p-2">{lead.city}</td>
-                  <td className="p-2">{lead.state}</td>
-                  <td className="p-2">{lead.source}</td>
-                  <td className="p-2">{lead.status}</td>
-                  <td className="p-2">{lead.score}</td>
-                  <td className="p-2">{lead.lead_value}</td>
-                  <td className="p-2">{lead.is_qualified ? "Yes" : "No"}</td>
-                  <td className="p-2 space-x-2 flex items-center">
-                    <button
-                      onClick={() =>setSelectedLead(lead)}
-                      className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition"
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => handleDelete(lead._id)}
-                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition"
-                    >
-                      Delete
-                    </button>
-                    <button 
-                     onClick={()=>handleSingleLead(lead._id)}
-                     className="text-2xl"
-                    >
+              {filteredLeads.length > 0 ? (
+                filteredLeads.map((lead) => (
+                  <tr key={lead._id} className="border-b hover:bg-gray-50">
+                    <td className="p-2">{lead.first_name} {lead.last_name}</td>
+                    <td className="p-2">{lead.email}</td>
+                    <td className="p-2">{lead.phone}</td>
+                    <td className="p-2">{lead.company}</td>
+                    <td className="p-2">{lead.city}</td>
+                    <td className="p-2">{lead.state}</td>
+                    <td className="p-2">{lead.source}</td>
+                    <td className="p-2">{lead.status}</td>
+                    <td className="p-2">{lead.score}</td>
+                    <td className="p-2">{lead.lead_value}</td>
+                    <td className="p-2">{lead.is_qualified ? "Yes" : "No"}</td>
+                    <td className="p-2 flex space-x-2">
+                      <button
+                        onClick={() => setSelectedLead(lead)}
+                        className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={() => handleDelete(lead._id)}
+                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                      <button
+                        onClick={() => handleSingleLead(lead._id)}
+                        className="text-2xl"
+                      >
                         ➡️
-                    </button>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="12" className="text-center p-4">
+                    No leads found
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
       )}
 
+      {/* Pagination */}
       <div className="flex justify-between mt-4">
         <button
           onClick={handlePrev}
@@ -192,9 +190,12 @@ const LeadsList = () => {
       </div>
 
       {/* Update Modal */}
-
-            {selectedLead && (
-        <UpdateLead lead={selectedLead} onClose={() => setSelectedLead(null)} refresh={fetchLeads} />
+      {selectedLead && (
+        <UpdateLead
+          lead={selectedLead}
+          onClose={() => setSelectedLead(null)}
+          refresh={fetchLeads}
+        />
       )}
     </div>
   );

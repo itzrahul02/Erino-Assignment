@@ -15,6 +15,7 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "x-refresh-token"]
 }));
+
 app.use(express.json({
     limit:"16kb"
 }));

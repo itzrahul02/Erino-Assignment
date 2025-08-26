@@ -31,6 +31,7 @@ const CreateLead = () => {
     try {
       const res = await axios.post(
         `${API_BASE_URL}/api/v2/leads`,
+        // 'http://localhost:3000/api/v2/leads',
         formData,
         { withCredentials: true }
       );

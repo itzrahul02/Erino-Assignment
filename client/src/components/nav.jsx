@@ -14,6 +14,7 @@ const Navbar = () => {
         Lead Management
       </div>
       <div className="space-x-4">
+        <input type="text" />
         <Link to="/showleads" className="hover:underline">
           Leads List
         </Link>
